@@ -18,7 +18,7 @@
                     <div class="row">
                         <h4 class="mb-30">Billing Details</h4>
                         <form method="post">
-                            {% csrf_token %}
+                            <!-- {% csrf_token %} -->
                             <div class="row">
                                 <div class="form-group col-lg-6">
                                     <input type="text" required="" name="fname" value="{{ request.user.username|title }}" placeholder="First name *">

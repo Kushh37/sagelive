@@ -129,7 +129,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-8">
                                                         <form class="contact-form-style mt-30 mb-50" action="#" method="post">
-                                                            {% csrf_token %}
+                                                            <!-- {% csrf_token %} -->
                                                             <div class="input-style mb-20">
                                                                 <label>Order ID</label>
                                                                 <input name="order-id" placeholder="Found in your order confirmation email" type="text" />
@@ -148,7 +148,7 @@
                                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                         <div class="row">
                                                 <div>
-                                                    <form class="mb-4" method="POST" > {% csrf_token %}
+                                                    <form class="mb-4" method="POST" > <!-- {% csrf_token %} -->
                                                         <div class="card-hdeader">
                                                             <h5>Add Address</h5>
                                                         </div>
@@ -212,7 +212,7 @@
                                             <div class="card-body">
                                                 <p>Already have an account? <a href="#">Log in instead!</a></p>
                                                 <form method="post" name="enq">
-                                                    {% csrf_token %}
+                                                    <!-- {% csrf_token %} -->
                                                     <div class="row">
                                                         <div class="form-group col-md-6">
                                                             <label>First Name <span class="required">*</span></label>
