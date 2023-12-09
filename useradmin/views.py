@@ -83,3 +83,4 @@ def dashboard_delete_product(request, pid):
     product = Product.objects.get(pid=pid)
     product.delete()
     return redirect("useradmin:dashboard-products")
+

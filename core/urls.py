@@ -43,7 +43,7 @@ urlpatterns = [
     # Update  Cart
     path("update-cart/", update_cart, name="update-cart"),
 
-    # Checkout  URL
+      # Checkout  URL
     path("checkout/", checkout_view, name="checkout"),
 
     # Paypal URL
@@ -70,10 +70,14 @@ urlpatterns = [
     # adding to wishlist
     path("add-to-wishlist/", add_to_wishlist, name="add-to-wishlist"),
 
+
     # Remvoing from wishlist
     path("remove-from-wishlist/", remove_wishlist, name="remove-from-wishlist"),
+
+
     path("contact/", contact, name="contact"),
     path("ajax-contact-form/", ajax_contact_form, name="ajax-contact-form"),
+
     path("about_us/", about_us, name="about_us"),
     path("purchase_guide/", purchase_guide, name="purchase_guide"),
     path("privacy_policy/", privacy_policy, name="privacy_policy"),

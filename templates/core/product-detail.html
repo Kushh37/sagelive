@@ -103,7 +103,7 @@
                                                     
                                                     <button type="submit" class="button button-add-to-cart add-to-cart-btn" data-index="{{ p.id }}" id="add-to-cart-btn"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                                     <a aria-label="Add To Wishlist" class="action-btn hover-up add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
-                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                                    <!-- <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
                                                 </div>
                                             </div>
                                             <div class="font-xs">
@@ -240,10 +240,10 @@
                                             </div>
                                             <div class="tab-pane fade" id="Vendor-info">
                                                 <div class="vendor-logo d-flex mb-30">
-                                                    <img src="{{p.vendor.image.url}}" alt="" />
+                                                    <img href="#" src="{{p.vendor.image.url}}" alt="" />
                                                     <div class="vendor-name ml-15">
                                                         <h6>
-                                                            <a href="vendor-details-2.html">{{p.vendor.title}}</a>
+                                                            <a href="#">{{p.vendor.title}}</a>
                                                         </h6>
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
@@ -352,7 +352,7 @@
                                                         <div class="row">
                                                             <div class="col-lg-8 col-md-12">
                                                                 <form class="form-contact comment_form hide-comment-form" action="{% url 'core:ajax-add-review' p.id %}" id="commentForm" method="POST">
-                                                                    #{% csrf_token %}
+                                                                    {% csrf_token %}
                                                                     <div class="row">
                                                                         <div class="col-12">
                                                                             <div class="form-group">
@@ -474,7 +474,7 @@
                                 <ul>
                                     <li>
                                         <i class="fi fi-rs-marker mr-10 text-brand"></i>
-                                        <!-- <span>
+                                        <span>
                                             {{ address.address }} <br />
                                              <br />
                                              {% if address.status == True  %}
@@ -482,8 +482,8 @@
                                              {% else %}
                                              <span class="text-danger">Unverified Address </span>
                                              {% endif %}
-                                        </span> -->
-                                        <a href="#" class="change float-end">Change</a>
+                                        </span>
+                                        <a href="{% url 'core:dashboard' %}" class="change float-end">Change</a>
                                     </li>
                                     <li class="hr"><span></span></li>
                                 </ul>

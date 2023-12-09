@@ -41,6 +41,7 @@ def product_list_view(request):
 
     return render(request, 'core/product-list.html', context)
 
+
 def category_list_view(request):
     categories = Category.objects.all()
 
@@ -48,6 +49,7 @@ def category_list_view(request):
         "categories":categories
     }
     return render(request, 'core/category-list.html', context)
+
 
 def category_product_list__view(request, cid):
 
@@ -160,7 +162,7 @@ def ajax_add_review(request, pid):
 
     return JsonResponse(
        {
-        'bool': True,
+         'bool': True,
         'context': context,
         'average_reviews': average_reviews
        }
@@ -182,17 +184,23 @@ def search_view(request):
 def filter_product(request):
     categories = request.GET.getlist("category[]")
     vendors = request.GET.getlist("vendor[]")
+
+
     min_price = request.GET['min_price']
     max_price = request.GET['max_price']
+
     products = Product.objects.filter(product_status="published").order_by("-id").distinct()
+
     products = products.filter(price__gte=min_price)
     products = products.filter(price__lte=max_price)
+
 
     if len(categories) > 0:
         products = products.filter(category__id__in=categories).distinct() 
 
     if len(vendors) > 0:
         products = products.filter(vendor__id__in=vendors).distinct() 
+    
     
     data = render_to_string("core/async/product-list.html", {"products": products})
     return JsonResponse({"data": data})
@@ -225,6 +233,8 @@ def add_to_cart(request):
         request.session['cart_data_obj'] = cart_product
     return JsonResponse({"data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj'])})
 
+
+
 def cart_view(request):
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:
@@ -252,6 +262,7 @@ def delete_item_from_cart(request):
     context = render_to_string("core/async/cart-list.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount})
     return JsonResponse({"data": context, 'totalcartitems': len(request.session['cart_data_obj'])})
 
+
 def update_cart(request):
     product_id = str(request.GET['id'])
     product_qty = request.GET['qty']
@@ -271,7 +282,7 @@ def update_cart(request):
     return JsonResponse({"data": context, 'totalcartitems': len(request.session['cart_data_obj'])})
 
 
-@login_required
+@login_required(login_url='/user/sign-in/')
 def checkout_view(request):
     cart_total_amount = 0
     total_amount = 0
@@ -317,6 +328,11 @@ def checkout_view(request):
 
         paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
 
+        # cart_total_amount = 0
+        # if 'cart_data_obj' in request.session:
+        #     for p_id, item in request.session['cart_data_obj'].items():
+        #         cart_total_amount += int(item['qty']) * float(item['price'])
+
         try:
             active_address = Address.objects.get(user=request.user, status=True)
         except:
@@ -324,6 +340,7 @@ def checkout_view(request):
             active_address = None
 
         return render(request, "core/checkout.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount, 'paypal_payment_button':paypal_payment_button, "active_address":active_address})
+
 
 @login_required
 def payment_completed_view(request):
@@ -338,10 +355,11 @@ def payment_failed_view(request):
     return render(request, 'core/payment-failed.html')
 
 
-@login_required
+@login_required(login_url='/user/sign-in/')
 def customer_dashboard(request):
     orders_list = CartOrder.objects.filter(user=request.user).order_by("-id")
     address = Address.objects.filter(user=request.user)
+
 
     orders = CartOrder.objects.annotate(month=ExtractMonth("order_date")).values("month").annotate(count=Count("id")).values("month", "count")
     month = []
@@ -378,14 +396,17 @@ def customer_dashboard(request):
     }
     return render(request, 'core/dashboard.html', context)
 
+
 def order_detail(request, id):
     order = CartOrder.objects.get(user=request.user, id=id)
     order_items = CartOrderProducts.objects.filter(order=order)
 
+    
     context = {
         "order_items": order_items,
     }
     return render(request, 'core/order-detail.html', context)
+
 
 
 def make_address_default(request):
@@ -394,7 +415,7 @@ def make_address_default(request):
     Address.objects.filter(id=id).update(status=True)
     return JsonResponse({"boolean": True})
 
-@login_required
+@login_required(login_url='/user/sign-in/')
 def wishlist_view(request):
     wishlist = wishlist_model.objects.all()
     context = {
@@ -402,6 +423,8 @@ def wishlist_view(request):
     }
     return render(request, "core/wishlist.html", context)
 
+
+    # w
 
 def add_to_wishlist(request):
     product_id = request.GET['id']
@@ -442,6 +465,7 @@ def add_to_wishlist(request):
 #     }
 #     t = render_to_string("core/async/wishlist-list.html", context)
 #     return JsonResponse({"data": t, "w":wishlist})
+
 
 def remove_wishlist(request):
     pid = request.GET['id']
@@ -502,4 +526,26 @@ def privacy_policy(request):
 def terms_of_service(request):
     return render(request, "core/terms_of_service.html")
 
+
+#analytics
+
+# def analytics(request):
+#     data = CartOrder.objects.values('id','price','order_date','product_status','user_id')
+    
+#     id_data = [item['id'] for item in data]
+#     price_data = [item['price'] for item in data]
+#     order_date_data = [item['order_date'] for item in data]
+#     product_status_data = [item['product_status'] for item in data]
+#     user_id_data = [item['user_id'] for item in data]
+
+#     context ={
+#         "id_data" : id_data,
+#         "price_data" : price_data,
+#         "order_date_data" : order_date_data,
+#         "product_status_data" : product_status_data,
+#         "user_id_data" : user_id_data
+#     }
+
+
+#     return render(request, "analytics/analyticaldashboard.html", context)
 
